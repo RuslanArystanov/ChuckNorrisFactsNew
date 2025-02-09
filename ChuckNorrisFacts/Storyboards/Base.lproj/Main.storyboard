@@ -55,7 +55,7 @@
             </objects>
             <point key="canvasLocation" x="840.45801526717548" y="-93.661971830985919"/>
         </scene>
-        <!--Item-->
+        <!--random-->
         <scene sceneID="h1l-10-cHe">
             <objects>
                 <viewController id="V13-re-doI" customClass="RandomViewController" customModule="ChuckNorrisFacts" customModuleProvider="target" sceneMemberID="viewController">
@@ -69,41 +69,58 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t2k-kh-FMB">
+                                <rect key="frame" x="0.0" y="303" width="320" height="216"/>
+                            </pickerView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="7y3-y3-ajx">
+                                <rect key="frame" x="150" y="101" width="20" height="20"/>
+                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="isH-hr-wgW">
-                                <rect key="frame" x="159" y="254" width="2" height="35"/>
+                                <rect key="frame" x="16" y="269" width="288" height="30"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="get random fact">
+                                    <fontDescription key="titleFontDescription" name="ArialMT" family="Arial" pointSize="14"/>
+                                </buttonConfiguration>
                                 <connections>
-                                    <action selector="getRandomFact" destination="V13-re-doI" eventType="touchUpInside" id="unY-Hy-QVd"/>
+                                    <action selector="getFact" destination="V13-re-doI" eventType="touchUpInside" id="unY-Hy-QVd"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kda-oA-2Z2"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="t2k-kh-FMB" firstAttribute="leading" secondItem="kda-oA-2Z2" secondAttribute="leading" id="1TG-wd-hp6"/>
                             <constraint firstItem="w0I-Hc-FOK" firstAttribute="leading" secondItem="kda-oA-2Z2" secondAttribute="leading" constant="16" id="5yH-TN-1jZ"/>
+                            <constraint firstItem="t2k-kh-FMB" firstAttribute="trailing" secondItem="kda-oA-2Z2" secondAttribute="trailing" id="7KR-ij-dgv"/>
+                            <constraint firstItem="isH-hr-wgW" firstAttribute="centerY" secondItem="bQE-lV-iFZ" secondAttribute="centerY" id="OCT-N0-hoi"/>
                             <constraint firstItem="kda-oA-2Z2" firstAttribute="trailing" secondItem="w0I-Hc-FOK" secondAttribute="trailing" constant="16" id="QKS-Th-YL1"/>
-                            <constraint firstItem="kda-oA-2Z2" firstAttribute="bottom" secondItem="isH-hr-wgW" secondAttribute="bottom" constant="230" id="inP-6W-3v2"/>
+                            <constraint firstItem="t2k-kh-FMB" firstAttribute="bottom" secondItem="kda-oA-2Z2" secondAttribute="bottom" id="exL-hN-ro2"/>
+                            <constraint firstItem="kda-oA-2Z2" firstAttribute="trailing" secondItem="7y3-y3-ajx" secondAttribute="trailing" constant="150" id="fN5-s0-BUh"/>
                             <constraint firstItem="w0I-Hc-FOK" firstAttribute="top" secondItem="kda-oA-2Z2" secondAttribute="top" constant="81" id="jb6-0W-L2B"/>
-                            <constraint firstItem="kda-oA-2Z2" firstAttribute="trailing" secondItem="isH-hr-wgW" secondAttribute="trailing" constant="159" id="sdl-Cz-3hN"/>
-                            <constraint firstItem="isH-hr-wgW" firstAttribute="leading" secondItem="kda-oA-2Z2" secondAttribute="leading" constant="159" id="zS1-L6-i1n"/>
+                            <constraint firstItem="isH-hr-wgW" firstAttribute="leading" secondItem="kda-oA-2Z2" secondAttribute="leading" constant="16" id="noR-ar-euW"/>
+                            <constraint firstItem="7y3-y3-ajx" firstAttribute="leading" secondItem="kda-oA-2Z2" secondAttribute="leading" constant="150" id="vcc-TJ-k3q"/>
+                            <constraint firstItem="7y3-y3-ajx" firstAttribute="top" secondItem="kda-oA-2Z2" secondAttribute="top" constant="81" id="wPn-lu-AWy"/>
+                            <constraint firstItem="kda-oA-2Z2" firstAttribute="trailing" secondItem="isH-hr-wgW" secondAttribute="trailing" constant="16" id="zms-hC-8z1"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" selectedImage="square.and.arrow.up.fill" catalog="system" id="Fjd-D3-zZg"/>
+                    <tabBarItem key="tabBarItem" title="random" image="text.bubble" catalog="system" selectedImage="text.word.spacing" id="Fjd-D3-zZg"/>
                     <navigationItem key="navigationItem" id="qyR-LP-I0R"/>
                     <connections>
                         <outlet property="aboutChuckNorris" destination="w0I-Hc-FOK" id="DlB-ZR-qXo"/>
+                        <outlet property="activityIndicator" destination="7y3-y3-ajx" id="2Lu-vg-tU8"/>
+                        <outlet property="categiriesPicker" destination="t2k-kh-FMB" id="BMg-t6-3OO"/>
+                        <outlet property="getFactButton" destination="isH-hr-wgW" id="I0W-ru-iNS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qCa-GQ-GTi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="66" y="708"/>
+            <point key="canvasLocation" x="65.625" y="707.74647887323943"/>
         </scene>
-        <!--Item-->
+        <!--search-->
         <scene sceneID="x94-4d-I2R">
             <objects>
                 <navigationController id="O5D-Qu-DOs" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" selectedImage="square.and.arrow.up" catalog="system" id="Asc-BA-xZF"/>
+                    <tabBarItem key="tabBarItem" title="search" selectedImage="text.magnifyingglass.rtl" catalog="system" id="Asc-BA-xZF"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="gUA-1q-AUc">
                         <rect key="frame" x="0.0" y="20" width="320" height="92.5"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -122,6 +139,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Qox-cr-OBC" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="6E1-po-9Hc">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -136,8 +154,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="square.and.arrow.up" catalog="system" width="110" height="128"/>
-        <image name="square.and.arrow.up.fill" catalog="system" width="117" height="128"/>
+        <image name="text.bubble" catalog="system" width="128" height="110"/>
+        <image name="text.magnifyingglass.rtl" catalog="system" width="128" height="117"/>
+        <image name="text.word.spacing" catalog="system" width="128" height="101"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

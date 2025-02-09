@@ -15,3 +15,7 @@ struct ChuckNorris: Decodable {
 struct Result: Decodable {
     let result: [ChuckNorris]
 }
+
+struct Category: Decodable {
+    let categories: [String]
+}

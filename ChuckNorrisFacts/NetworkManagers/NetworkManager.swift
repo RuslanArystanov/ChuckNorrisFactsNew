@@ -10,13 +10,14 @@ import Foundation
 enum URLChuckNorris: String {
     case searchURL = "https://api.chucknorris.io/jokes/search?query="
     case randomURL = "https://api.chucknorris.io/jokes/random"
+    case categoryURL = "https://api.chucknorris.io/jokes/categories"
 }
 
 class NetworkManager {
     static var share = NetworkManager()
     private init (){}
     
-    func fetchSearchData(url: String, searchText: String = "", completion: @escaping(Result)-> Void) {
+    func fetchSearchData<T:Decodable>(url: String, searchText: String = "", completion: @escaping(T)-> Void) {
         guard let url = URL(string: url + searchText) else {return}
         
         URLSession.shared.dataTask(with: url) { data, _, error in
@@ -28,7 +29,7 @@ class NetworkManager {
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let result = try decoder.decode(Result.self, from: jsonData)
+                let result = try decoder.decode(T.self, from: jsonData)
                 
                 DispatchQueue.main.async {
                     completion(result)
