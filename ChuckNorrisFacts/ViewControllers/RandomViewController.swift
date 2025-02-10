@@ -21,7 +21,7 @@ class RandomViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         getFactButton.backgroundColor = .orange
         getFactButton.setTitleColor(.black, for: .normal)
         getFactButton.layer.cornerRadius = 10
