@@ -17,7 +17,7 @@ class NetworkManager {
     static var share = NetworkManager()
     private init (){}
     
-    func fetchSearchData<T:Decodable>(url: String, searchText: String = "", completion: @escaping(T)-> Void) {
+    func fetchData<T:Decodable>(url: String, searchText: String = "", completion: @escaping(T)-> Void) {
         guard let url = URL(string: url + searchText) else {return}
         
         URLSession.shared.dataTask(with: url) { data, _, error in
