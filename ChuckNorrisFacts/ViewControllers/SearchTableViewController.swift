@@ -14,7 +14,7 @@ protocol SortDelegate {
 class SearchTableViewController: UITableViewController, SortDelegate{
     
     private var chuckNorrisFacts: [ChuckNorris] = []
-    var activityIndicator: UIActivityIndicatorView!
+    private var activityIndicator: UIActivityIndicatorView!
     let viewControllerToPresent = SortViewController()
     
     override func viewDidLoad() {
@@ -46,11 +46,10 @@ class SearchTableViewController: UITableViewController, SortDelegate{
     }
     
     // MARK: - Table view data source
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         chuckNorrisFacts.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
@@ -61,30 +60,41 @@ class SearchTableViewController: UITableViewController, SortDelegate{
         cell.contentConfiguration = content
         return cell
     }
-    
-    // MARK: - Navigation
-    
-    
 }
 
 extension SearchTableViewController: UISearchBarDelegate {
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        chuckNorrisFacts.removeAll()
-        activityIndicator.startAnimating()
-        
-        NetworkManager.share.fetchData(
-            url: URLChuckNorris.searchURL.rawValue,
-            searchText: searchBar.text ?? "") { (chuckNorris: Result) in
-            
-                for result in chuckNorris.result {
-                self.chuckNorrisFacts.append(result)
-            }
-            
-            self.activityIndicator.stopAnimating()
-            self.tableView.reloadData()
+        guard let textCount = searchBar.text?.count else {
+            print("error")
+            return
         }
-        searchBar.resignFirstResponder()
+        
+        if textCount <= 3 {
+            searchBar.text?.removeAll()
+            showAlert(text: "Please enter more than 3 characters.")
+        } else {
+            chuckNorrisFacts.removeAll()
+            activityIndicator.startAnimating()
+            
+            NetworkManager.share.fetchData(
+                url: URLChuckNorris.searchURL.rawValue,
+                searchText: searchBar.text ?? "") { (chuckNorris: Result) in
+                    
+                    for result in chuckNorris.result {
+                        self.chuckNorrisFacts.append(result)
+                    }
+                    
+                    self.activityIndicator.stopAnimating()
+                    self.tableView.reloadData()
+                    
+                    if self.chuckNorrisFacts.isEmpty {
+                        searchBar.text?.removeAll()
+                        self.showAlert(text: "No results found. Please try a different search.")
+                    }
+                }
+            
+            searchBar.resignFirstResponder()
+        }
     }
     
     func sortSearchResult(sortedMethod: String) {
@@ -98,5 +108,11 @@ extension SearchTableViewController: UISearchBarDelegate {
         }
         
         tableView.reloadData()
+    }
+    
+    private func showAlert(text: String){
+        let alert = UIAlertController(title: "Error", message: text, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default))
+        self.present(alert, animated: true, completion: nil)
     }
 }

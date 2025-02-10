@@ -22,13 +22,17 @@ class RandomViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        getFactButton.backgroundColor = .orange
+        getFactButton.setTitleColor(.black, for: .normal)
+        getFactButton.layer.cornerRadius = 10
+        
         categiriesPicker.delegate = self
         categiriesPicker.dataSource = self
         aboutChuckNorris.text = "About Chuck Norris"
         
         getCategories()
     }
-
+    
     @IBAction func getFact() {
         setupShimmer()
         aboutChuckNorris.text = "Loading..."
@@ -91,6 +95,7 @@ extension RandomViewController {
         }
     }
     
+    // MARK: - Shimmer settings
     private func setupShimmer() {
         shimmerLayer.frame = aboutChuckNorris.bounds
         shimmerLayer.colors = [
@@ -102,7 +107,7 @@ extension RandomViewController {
         shimmerLayer.startPoint = CGPoint(x: 0, y: 0.5)
         shimmerLayer.endPoint = CGPoint(x: 1, y: 0.5)
         aboutChuckNorris.layer.mask = shimmerLayer
-            
+        
         animateShimmer()
     }
     
@@ -119,5 +124,5 @@ extension RandomViewController {
         aboutChuckNorris.layer.mask = .none
         shimmerLayer.removeAnimation(forKey: "shimmer")
     }
-
+    
 }

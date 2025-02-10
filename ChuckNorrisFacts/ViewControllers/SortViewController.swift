@@ -13,7 +13,7 @@ class SortViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     private let sortList = ["Sort by Length", "Sort Alphabetically"]
     var delegate: SortDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -25,7 +25,7 @@ class SortViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         
         successButton.setTitle("Apply", for: .normal)
         successButton.setTitleColor(.black, for: .normal)
-        successButton.backgroundColor = .lightGray
+        successButton.backgroundColor = .orange
         successButton.layer.cornerRadius = 5
         successButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(successButton)
@@ -34,7 +34,7 @@ class SortViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
             picckerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             picckerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             picckerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-                
+            
             // label2 — отталкивается от нижнего края label1
             successButton.topAnchor.constraint(equalTo: picckerView.bottomAnchor, constant: 20),
             successButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -44,12 +44,12 @@ class SortViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         successButton.addTarget(self, action: #selector(applySort), for: .touchUpInside)
     }
     
+    // MARK: - Actions
     @objc func applySort() {
         let index = picckerView.selectedRow(inComponent: 0)
         delegate?.sortSearchResult(sortedMethod: sortList[index])
         dismiss(animated: true)
     }
-    
     
     // MARK: - UIPickerViewDataSource
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
