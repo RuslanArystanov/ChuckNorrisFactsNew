@@ -36,6 +36,7 @@ class RandomViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     }
     
     @IBAction func getFact() {
+        aboutChuckNorris.text = ""
         setupShimmer()
         
         if isCategory == false {
