@@ -11,6 +11,7 @@ class RandomViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     @IBOutlet var categiriesPicker: UIPickerView!
     @IBOutlet var getFactButton: UIButton!
     
+    @IBOutlet var shimmerImage: UIImageView!
     @IBOutlet var aboutChuckNorris: UILabel!
     
     private var categoriesChuck: [String] = ["random fact"]
@@ -21,6 +22,8 @@ class RandomViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        shimmerImage.image = UIImage(named: "shimmer dlya rusa")
 
         getFactButton.backgroundColor = .orange
         getFactButton.setTitleColor(.black, for: .normal)
@@ -28,14 +31,12 @@ class RandomViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         
         categiriesPicker.delegate = self
         categiriesPicker.dataSource = self
-        aboutChuckNorris.text = "About Chuck Norris"
         
         getCategories()
     }
     
     @IBAction func getFact() {
         setupShimmer()
-        aboutChuckNorris.text = "Loading..."
         
         if isCategory == false {
             getRandomFact()
@@ -83,21 +84,22 @@ extension RandomViewController {
     
     private func getFactFor(category name: String){
         NetworkManager.share.fetchRandomData(url: URLChuckNorris.randomURL.rawValue,categoryName: name, isCategory: true) { ChuckNorris in
-            self.aboutChuckNorris.text = ChuckNorris.value
             self.stopShimmer()
+            self.aboutChuckNorris.text = ChuckNorris.value
         }
     }
     
     private func getRandomFact(){
         NetworkManager.share.fetchRandomData(url: URLChuckNorris.randomURL.rawValue) { ChuckNorris in
-            self.aboutChuckNorris.text = ChuckNorris.value
             self.stopShimmer()
+            self.aboutChuckNorris.text = ChuckNorris.value
         }
     }
     
     // MARK: - Shimmer settings
     private func setupShimmer() {
-        shimmerLayer.frame = aboutChuckNorris.bounds
+        shimmerImage.isHidden = false
+        shimmerLayer.frame = shimmerImage.bounds
         shimmerLayer.colors = [
             UIColor.clear.cgColor,
             UIColor.white.withAlphaComponent(0.6).cgColor,
@@ -106,7 +108,7 @@ extension RandomViewController {
         shimmerLayer.locations = [0, 0.5, 1]
         shimmerLayer.startPoint = CGPoint(x: 0, y: 0.5)
         shimmerLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        aboutChuckNorris.layer.mask = shimmerLayer
+        shimmerImage.layer.mask = shimmerLayer
         
         animateShimmer()
     }
@@ -121,7 +123,8 @@ extension RandomViewController {
     }
     
     private func stopShimmer() {
-        aboutChuckNorris.layer.mask = .none
+        shimmerImage.isHidden = true
+        shimmerImage.layer.mask = .none
         shimmerLayer.removeAnimation(forKey: "shimmer")
     }
     
