@@ -14,6 +14,7 @@ protocol SortDelegate {
 class SearchTableViewController: UITableViewController, SortDelegate{
     
     private var chuckNorrisFacts: [ChuckNorris] = []
+    private var searchText: String?
     private var activityIndicator: UIActivityIndicatorView!
     let viewControllerToPresent = SortViewController()
     
@@ -28,6 +29,8 @@ class SearchTableViewController: UITableViewController, SortDelegate{
             activityIndicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor, constant: -100)
         ])
+        
+        refresh()
     }
     
     @IBAction func openSortView(_ sender: Any) {
@@ -64,6 +67,7 @@ class SearchTableViewController: UITableViewController, SortDelegate{
 
 extension SearchTableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchText = searchBar.text
         guard let textCount = searchBar.text?.count else {
             print("error")
             return
@@ -97,6 +101,34 @@ extension SearchTableViewController: UISearchBarDelegate {
         }
     }
     
+    @objc private func fetshData(){
+        let text = searchText ?? ""
+        
+        if text.count <= 3 {
+            showAlert(text: "Please enter more than 3 characters.")
+            self.refreshControl?.endRefreshing()
+        } else {
+            NetworkManager.share.fetchData(
+                url: URLChuckNorris.searchURL.rawValue,
+                searchText: searchText ?? "") { (chuckNorris: Result) in
+                    for result in chuckNorris.result {
+                        self.chuckNorrisFacts.append(result)
+                    }
+                    
+                    if self.chuckNorrisFacts.isEmpty {
+                        self.showAlert(text: "No results found. Please try a different search.")
+                    }
+                    
+                    if self.refreshControl != nil{
+                        self.refreshControl?.endRefreshing()
+                    }
+                    
+                    self.tableView.reloadData()
+                }
+        }
+        
+    }
+    
     func sortSearchResult(sortedMethod: String) {
         switch sortedMethod {
         case "Sort by Length":
@@ -114,5 +146,12 @@ extension SearchTableViewController: UISearchBarDelegate {
         let alert = UIAlertController(title: "Error", message: text, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func refresh() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        tableView.refreshControl?.addTarget(self, action: #selector(fetshData), for: .valueChanged)
+        
     }
 }
