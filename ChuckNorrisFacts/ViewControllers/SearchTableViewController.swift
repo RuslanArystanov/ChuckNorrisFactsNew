@@ -56,8 +56,8 @@ class SearchTableViewController: UITableViewController, SortDelegate{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        let chuckNorris = chuckNorrisFacts[indexPath.row]
         
+        let chuckNorris = chuckNorrisFacts[indexPath.row]
         content.text = chuckNorris.value
         
         cell.contentConfiguration = content
@@ -67,7 +67,7 @@ class SearchTableViewController: UITableViewController, SortDelegate{
 
 extension SearchTableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchText = searchBar.text
+        searchText = searchBar.text?.trimmingCharacters(in: .whitespaces)
         guard let textCount = searchBar.text?.count else {
             print("error")
             return
@@ -77,12 +77,12 @@ extension SearchTableViewController: UISearchBarDelegate {
             searchBar.text?.removeAll()
             showAlert(text: "Please enter more than 3 characters.")
         } else {
-            chuckNorrisFacts.removeAll()
             activityIndicator.startAnimating()
             
             NetworkManager.share.fetchData(
                 url: URLChuckNorris.searchURL.rawValue,
-                searchText: searchBar.text ?? "") { (chuckNorris: Result) in
+                searchText: searchText ?? "") { (chuckNorris: Result) in
+                    self.chuckNorrisFacts.removeAll()
                     
                     for result in chuckNorris.result {
                         self.chuckNorrisFacts.append(result)
@@ -101,7 +101,7 @@ extension SearchTableViewController: UISearchBarDelegate {
         }
     }
     
-    @objc private func fetshData(){
+    @objc private func fetchData(){
         let text = searchText ?? ""
         
         if text.count <= 3 {
@@ -110,10 +110,13 @@ extension SearchTableViewController: UISearchBarDelegate {
         } else {
             NetworkManager.share.fetchData(
                 url: URLChuckNorris.searchURL.rawValue,
-                searchText: searchText ?? "") { (chuckNorris: Result) in
+                searchText: text) { (chuckNorris: Result) in
+                    self.chuckNorrisFacts.removeAll()
+                    
                     for result in chuckNorris.result {
                         self.chuckNorrisFacts.append(result)
                     }
+                    self.tableView.reloadData()
                     
                     if self.chuckNorrisFacts.isEmpty {
                         self.showAlert(text: "No results found. Please try a different search.")
@@ -122,8 +125,6 @@ extension SearchTableViewController: UISearchBarDelegate {
                     if self.refreshControl != nil{
                         self.refreshControl?.endRefreshing()
                     }
-                    
-                    self.tableView.reloadData()
                 }
         }
         
@@ -151,7 +152,7 @@ extension SearchTableViewController: UISearchBarDelegate {
     private func refresh() {
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        tableView.refreshControl?.addTarget(self, action: #selector(fetshData), for: .valueChanged)
+        tableView.refreshControl?.addTarget(self, action: #selector(fetchData), for: .valueChanged)
         
     }
 }

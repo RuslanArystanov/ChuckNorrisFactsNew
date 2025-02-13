@@ -19,10 +19,10 @@ class NetworkManager {
     
     func fetchData<T:Decodable>(url: String, searchText: String = "", completion: @escaping(T)-> Void) {
         guard let url = URL(string: url + searchText) else {return}
-        
+        print(searchText)
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let jsonData = data else {
-                print(error.debugDescription)
+                print("ошибка в запросе", error.debugDescription)
                 return
             }
             
@@ -35,7 +35,7 @@ class NetworkManager {
                     completion(result)
                 }
             } catch let error {
-                print(error.localizedDescription)
+                print("ошибка пр парсинге", error.localizedDescription)
             }
         }.resume()
     }
