@@ -9,6 +9,7 @@ import UIKit
 
 protocol SortDelegate {
     func sortSearchResult(sortedMethod: String)
+    func toggleModalState(state: Bool)
 }
 
 class SearchTableViewController: UITableViewController, SortDelegate{
@@ -16,7 +17,7 @@ class SearchTableViewController: UITableViewController, SortDelegate{
     private var chuckNorrisFacts: [ChuckNorris] = []
     private var searchText: String?
     private var activityIndicator: UIActivityIndicatorView!
-    let viewControllerToPresent = SortViewController()
+    var modalIsOpened = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,19 +34,24 @@ class SearchTableViewController: UITableViewController, SortDelegate{
         refresh()
     }
     
+    
     @IBAction func openSortView(_ sender: Any) {
-        viewControllerToPresent.delegate = self
-        
-        if let sheet = viewControllerToPresent.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.prefersEdgeAttachedInCompactHeight = true
-            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-            sheet.prefersGrabberVisible = true
+        if !modalIsOpened {
+            modalIsOpened = true
+            let viewControllerToPresent = SortViewController()
+            viewControllerToPresent.delegate = self
+            
+            if let sheet = viewControllerToPresent.sheetPresentationController {
+                sheet.detents = [.medium()]
+                sheet.largestUndimmedDetentIdentifier = .medium
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+                sheet.prefersEdgeAttachedInCompactHeight = true
+                sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+                sheet.prefersGrabberVisible = true
+            }
+            
+            present(viewControllerToPresent, animated: true, completion: nil)
         }
-        
-        present(viewControllerToPresent, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source
@@ -82,7 +88,10 @@ extension SearchTableViewController: UISearchBarDelegate {
             NetworkManager.share.fetchData(
                 url: URLChuckNorris.searchURL.rawValue,
                 searchText: searchText ?? "") { (chuckNorris: Result) in
-                    self.chuckNorrisFacts.removeAll()
+                    
+                    if !self.chuckNorrisFacts.isEmpty{
+                        self.chuckNorrisFacts.removeAll()
+                    }
                     
                     for result in chuckNorris.result {
                         self.chuckNorrisFacts.append(result)
@@ -141,6 +150,10 @@ extension SearchTableViewController: UISearchBarDelegate {
         }
         
         tableView.reloadData()
+    }
+    
+    func toggleModalState(state: Bool) {
+        modalIsOpened = state
     }
     
     private func showAlert(text: String){

@@ -44,6 +44,7 @@ class SortViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         successButton.addTarget(self, action: #selector(applySort), for: .touchUpInside)
     }
     
+    
     // MARK: - Actions
     @objc func applySort() {
         let index = picckerView.selectedRow(inComponent: 0)
@@ -63,5 +64,11 @@ class SortViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     // MARK: - UIPickerViewDelegate
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         sortList[row]
+    }
+}
+
+extension SortViewController {
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.toggleModalState(state: false)
     }
 }
